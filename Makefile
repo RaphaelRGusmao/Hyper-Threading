@@ -12,7 +12,7 @@ clean:
 	rm -rf *.o *~
 	rm -rf minidesafio2
 
-minidesafio2: minidesafio2.o
+minidesafio2: minidesafio2.o trabalhador.o
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 %.o: %.c
