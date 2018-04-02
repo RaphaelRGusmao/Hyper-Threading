@@ -14,6 +14,12 @@
 #include <stdio.h>
 #include <pthread.h>
 
+// Variavel compartilhada entre as threads
+static long pseudo_sum = 0;
+
+// Mutex para controlar o acesso a variavel compartilhada
+pthread_mutex_t mutex;
+
 // Fonte
 #define CYAN      "\033[36;1m" // Azul claro
 #define GREEN     "\033[32;1m" // Verde
@@ -26,7 +32,7 @@ struct worker {
 	long A;
 	long B;
 	long result;
-    pthread_t thread;															// TODO
+    // pthread_t thread;															// TODO
 };
 typedef struct worker *Worker;
 
@@ -39,6 +45,10 @@ long funcao_cpu_dominante(long A, long B);			    						// TODO
 // Thread do trabalhador
 void *WORKER_thread(void *arg);
 
+// Funcao para controlar o acesso a variavel compartilhada
+void WORKER_add_to_sum (long quantitie);
+
+long WORKER_get_pseudo_sum();
 #endif
 
 /******************************************************************************/
