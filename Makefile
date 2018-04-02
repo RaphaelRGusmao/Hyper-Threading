@@ -1,19 +1,36 @@
-CC=gcc
+################################################################################
+#                                IME-USP (2018)                                #
+#           MAC0219 - Programacao Concorrente e Paralela - Desafio2            #
+#                                                                              #
+#                                   Makefile                                   #
+#                                                                              #
+#                       Marcelo Schmitt   - NUSP 9297641                       #
+#                       Raphael R. Gusmao - NUSP 9778561                       #
+################################################################################
 
-CFLAGS=-std=gnu11 -Wall -O0
-LDFLAGS=-lreadline -pthread -lm
+.PHONY: clean
+CC = gcc
+CFLAGS = -Wall -O2 -g
+OBJS = \
+	worker.o \
+	desafio2.o
 
-all: minidesafio2
+all: desafio2
 
-run:
-	./minidesafio2
+desafio2: $(OBJS)
+	$(CC) $(CFLAGS) $^ -o $@ -lpthread
+	make clean
 
-clean:	
-	rm -rf *.o *~
-	rm -rf minidesafio2
-
-minidesafio2: minidesafio2.o trabalhador.o
-	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
+%.o: %.c %.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f *.o *~
+
+run:
+	./desafio2
+
+################################################################################
