@@ -69,14 +69,14 @@ int main (int argc, char const *argv[])
     printf(CYAN "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ Inicio ]\n\n" END);
     // Inicializando rand com uma semente definida para garantir que cada
     // execucao fara as mesmas operacoes
-    srand((unsigned) 1);
+    // srand((unsigned) 1);
 
     // --------------------------------------------------- Execucao com 1 thread
     printf(GREEN "Execucao com 1 thread:\n" END);
     uint64_t beginning_single = getTime();
-    long double result = funcao_cpu_dominante(0, n_contas);
+    long result = funcao_cpu_dominante(0, n_contas);
     uint64_t finish_single = getTime();
-    printf("\tThread Main - Result: %.2Lf\n", result);
+    printf("\tThread Main - Result: %lu\n", result);
     printf("\tTempo total de execucao: %lu nanossegundos\n\n", finish_single - beginning_single);
 
     // -------------------------------------------------- Execucao com n threads
@@ -95,7 +95,7 @@ int main (int argc, char const *argv[])
 
     // Inicializando rand com uma semente definida para garantir que cada
     // execucao fara as mesmas operacoes
-    srand((unsigned) 1);
+    // srand((unsigned) 1);
 
     // Aloca memória para as threads
     pthread_t *threads = malloc(n_threads * sizeof(pthread_t));
@@ -129,7 +129,7 @@ int main (int argc, char const *argv[])
     printf("\tTempo total de execucao com %d threads: %lu nanossegundos\n",
             n_threads, finish_threads - beginning_threads);
 
-    printf("\t%d threads - Result: %.2Lf\n", n_threads, WORKER_get_pseudo_sum());
+    printf("\t%d threads - Result: %lu\n", n_threads, WORKER_get_pseudo_sum());
 
     // Libera a memoria alocada
     for (int i = 0; i < n_threads; i++) {
@@ -140,6 +140,9 @@ int main (int argc, char const *argv[])
 
 
     printf(CYAN "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ Fim ]\n\n" END);
+
+    // TODO remover isso
+    printf("n threads - 1 thread %lu\n", (finish_threads - beginning_threads) - (finish_single - beginning_single) );
 }
 
 /******************************************************************************/

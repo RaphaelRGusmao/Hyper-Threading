@@ -25,15 +25,16 @@ Worker WORKER_new (int id, long A, long B)
 }
 
 /******************************************************************************/
-long double funcao_cpu_dominante (long A, long B)
+long funcao_cpu_dominante (long A, long B)
 {
-    long double tmp_sum = 0;
+    long tmp_sum = 0;
     while (A++ < B) {
     	// tmp_sum += ((rand() % 3) * 4) - 4;
     	// tmp_sum += ((rand() % 5) * 2) - 4;
     	// tmp_sum += 1;
     	// Contas para ocupar a FPU
-    	tmp_sum += (((17 % 4) * 5) - 2)*1.0 / 6;
+    	// tmp_sum += (((17 % 4) * 5) - 2)*1.0 / 6;
+    	tmp_sum += (((15 % 4) * 5) - 2) / 6;
     }
     return tmp_sum;
 }
@@ -43,9 +44,9 @@ void *WORKER_thread (void *p_worker)
 {
     Worker worker = *((Worker*)p_worker);
 
-	long double result = funcao_cpu_dominante(worker->A, worker->B);
+	long result = funcao_cpu_dominante(worker->A, worker->B);
 
-	printf("\tThread%d - Result: %.2Lf\n", worker->id, result);
+	printf("\tThread%d - Result: %lu\n", worker->id, result);
 	// Soma o result numa variavel global controlada por um mutex
 	WORKER_add_to_sum(result);
 
@@ -53,7 +54,7 @@ void *WORKER_thread (void *p_worker)
 }
 
 /******************************************************************************/
-void WORKER_add_to_sum (long double quantitie) {
+void WORKER_add_to_sum (long quantitie) {
 	// printf("quantitie %lu   pseudo_sum %lu\n", quantitie, pseudo_sum);
 	pthread_mutex_lock(&mutex);
 	pseudo_sum += quantitie;
@@ -62,7 +63,7 @@ void WORKER_add_to_sum (long double quantitie) {
 }
 
 /******************************************************************************/
-long double WORKER_get_pseudo_sum() {
+long WORKER_get_pseudo_sum() {
 	return pseudo_sum;
 }
 
