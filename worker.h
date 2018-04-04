@@ -15,7 +15,7 @@
 #include <pthread.h>
 
 // Variavel compartilhada entre as threads
-static long pseudo_sum = 0;
+static long double pseudo_sum = 0.0;
 
 // Mutex para controlar o acesso a variavel compartilhada
 pthread_mutex_t mutex;
@@ -31,7 +31,7 @@ struct worker {
 	int id;
 	long A;
 	long B;
-	long result;
+	long double result;
     // pthread_t thread;															// TODO
 };
 typedef struct worker *Worker;
@@ -46,9 +46,9 @@ long double funcao_cpu_dominante(long A, long B);			    						// TODO
 void *WORKER_thread(void *arg);
 
 // Funcao para controlar o acesso a variavel compartilhada
-void WORKER_add_to_sum (long quantitie);
+void WORKER_add_to_sum (long double quantitie);
 
-long WORKER_get_pseudo_sum();
+long double WORKER_get_pseudo_sum();
 #endif
 
 /******************************************************************************/

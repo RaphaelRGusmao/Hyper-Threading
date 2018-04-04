@@ -11,11 +11,14 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdint.h>
+#include <string.h>
 #include <pthread.h>
+#include <limits.h>
+#include <errno.h>
 #include "worker.h"
 
 #define n_contas 10000000
-#define n_threads 2 //n_threads deve dividir n_contas de forma exata
+// #define n_threads 4 //n_threads deve dividir n_contas de forma exata
 
 /******************************************************************************/
 // Retorna o tempo atual em nanossegundos
@@ -27,8 +30,42 @@ uint64_t getTime () {
 
 /******************************************************************************/
 // Funcao principal
-int main ()
+// Recebe como argumento opcional o numero de threads que devem ser usadas.
+// Se o argumento nao estiver presente executa com uma unica thread.
+int main (int argc, char const *argv[])
 {
+
+    int n_threads = 1;
+
+    if (argc > 1) {
+        char *p;
+        errno = 0;
+        int conv = strtol(argv[1], &p, 10);
+        if (errno != 0 || *p != '\0' || conv > INT_MAX) {
+            printf("Erro ao converter argumentos para int\n");
+            return(1);
+        } else {
+            n_threads = conv;
+        }
+    }
+
+    // Poderiamos ter feito um if aqui para executar apenas o trecho de uma 
+    // thread ou o trecho de mais threads mas achamos interessante executar
+    // ambos para visualizar se as contas feitas pelas varias threads foram
+    // as mesmas que uma unica thread faria e também para ter sempre visivel
+    // uma amostra do tempo que uma unica thread tomaria para executar.
+    // Mesmo assim na hora de realizar os testes levamos em conta os
+    // resultados de uma thread quando apenas uma CPU estava ativa e os
+    // resultados com n threads quando exatamente n CPUs estavam ativas.
+    // Verificamos isso com o comando lscpu --extended no shell.
+
+    // Um resultado interessante de ser observado eh rodar o programa sem 
+    // argumento opcional e comparar os tempos de execucao para uma thread
+    // e para n = 1 thread(s). O tempo da primeira execucao eh sempre 
+    // ligeiramente menor devido a nao precisar da estrutura de multitred
+    // (alocar memoria para a thread, criar uma thread separada da main para
+    // calcular, usar o mutex).
+
     printf(CYAN "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ Inicio ]\n\n" END);
     // Inicializando rand com uma semente definida para garantir que cada
     // execucao fara as mesmas operacoes
@@ -37,9 +74,9 @@ int main ()
     // --------------------------------------------------- Execucao com 1 thread
     printf(GREEN "Execucao com 1 thread:\n" END);
     uint64_t beginning_single = getTime();
-    long result = funcao_cpu_dominante(0, n_contas);
+    long double result = funcao_cpu_dominante(0, n_contas);
     uint64_t finish_single = getTime();
-    printf("\tThread Main - Result: %lu\n", result);
+    printf("\tThread Main - Result: %.2Lf\n", result);
     printf("\tTempo total de execucao: %lu nanossegundos\n\n", finish_single - beginning_single);
 
     // -------------------------------------------------- Execucao com n threads
@@ -53,7 +90,7 @@ int main ()
     // Supomos que n_threads divide n_contas
     long interval = n_contas / n_threads;
     for (long i = 0; i < n_threads; i++) {
-    	workers[i] = WORKER_new(i, i*interval, (i+1)*interval);                                // TODO dividir o trabalho igualmente
+    	workers[i] = WORKER_new(i, i*interval, (i+1)*interval);
     }
 
     // Inicializando rand com uma semente definida para garantir que cada
@@ -79,23 +116,22 @@ int main ()
 	    }
     }
 
-
     // Espera as threads terminarem de executar
     for (int i = 0; i < n_threads; i++) {
         if (pthread_join(threads[i], NULL)) {
             printf(YELLOW "Error joining thread %d\n" END, i);
             exit(EXIT_FAILURE);
         }
-        // printf("pseudo soma no meio: %lu\n", pseudo_sum);
     }
+
     // Calcula e mostra o tempo de execucao da simulacao
     uint64_t finish_threads = getTime();
     printf("\tTempo total de execucao com %d threads: %lu nanossegundos\n",
             n_threads, finish_threads - beginning_threads);
 
-    printf("\t%d threads - Result: %lu\n", n_threads, WORKER_get_pseudo_sum());
+    printf("\t%d threads - Result: %.2Lf\n", n_threads, WORKER_get_pseudo_sum());
 
-    // Libera toda a memoria alocada
+    // Libera a memoria alocada
     for (int i = 0; i < n_threads; i++) {
         free(workers[i]);
     }

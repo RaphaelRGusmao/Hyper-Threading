@@ -32,7 +32,7 @@ long double funcao_cpu_dominante (long A, long B)
     	// tmp_sum += ((rand() % 3) * 4) - 4;
     	// tmp_sum += ((rand() % 5) * 2) - 4;
     	// tmp_sum += 1;
-    	// Contas para ocupar a ULA
+    	// Contas para ocupar a FPU
     	tmp_sum += (((17 % 4) * 5) - 2)*1.0 / 6;
     }
     return tmp_sum;
@@ -53,7 +53,7 @@ void *WORKER_thread (void *p_worker)
 }
 
 /******************************************************************************/
-void WORKER_add_to_sum (long quantitie) {
+void WORKER_add_to_sum (long double quantitie) {
 	// printf("quantitie %lu   pseudo_sum %lu\n", quantitie, pseudo_sum);
 	pthread_mutex_lock(&mutex);
 	pseudo_sum += quantitie;
@@ -62,7 +62,7 @@ void WORKER_add_to_sum (long quantitie) {
 }
 
 /******************************************************************************/
-long WORKER_get_pseudo_sum() {
+long double WORKER_get_pseudo_sum() {
 	return pseudo_sum;
 }
 
