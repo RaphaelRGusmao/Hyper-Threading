@@ -14,8 +14,8 @@
 #include <pthread.h>
 #include "worker.h"
 
-#define n_contas 1000000
-#define n_threads 4 //n_threads deve dividir n_contas de forma exata
+#define n_contas 10000000
+#define n_threads 2 //n_threads deve dividir n_contas de forma exata
 
 /******************************************************************************/
 // Retorna o tempo atual em nanossegundos

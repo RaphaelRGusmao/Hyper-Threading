@@ -39,8 +39,8 @@ typedef struct worker *Worker;
 // Cria um trabalhador
 Worker WORKER_new (int id, long A, long B);
 
-// Faz contas para ocupar a ULA
-long funcao_cpu_dominante(long A, long B);			    						// TODO
+// Faz contas para ocupar a FPU
+long double funcao_cpu_dominante(long A, long B);			    						// TODO
 
 // Thread do trabalhador
 void *WORKER_thread(void *arg);
