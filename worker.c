@@ -9,7 +9,6 @@
  ******************************************************************************/
 #include "worker.h"
 
-
 /******************************************************************************/
 Worker WORKER_new (int id, int type, long A, long B)
 {
@@ -26,8 +25,8 @@ Worker WORKER_new (int id, int type, long A, long B)
 }
 
 /******************************************************************************/
-// Faz contas para ocupar a ULA
-long funcao_cpu_dominante_long(long A, long B) {
+long funcao_cpu_dominante_long (long A, long B)
+{
     long tmp_sum = 0;
     while (A++ < B) {
     	// Contas para ocupar a ULA
@@ -37,8 +36,7 @@ long funcao_cpu_dominante_long(long A, long B) {
 }
 
 /******************************************************************************/
-// Faz contas para ocupar a ULA
-long funcao_cpu_dominante_long_rand(long A, long B)
+long funcao_cpu_dominante_long_rand (long A, long B)
 {
     long tmp_sum = 0;
     while (A++ < B) {
@@ -49,8 +47,7 @@ long funcao_cpu_dominante_long_rand(long A, long B)
 }
 
 /******************************************************************************/
-// Faz contas para ocupar a FPU
-long double funcao_cpu_dominante_long_double(long A, long B)
+long double funcao_cpu_dominante_long_double (long A, long B)
 {
     long double tmp_sum = 0;
     while (A++ < B) {
@@ -68,47 +65,51 @@ void *WORKER_thread (void *p_worker)
 	if (worker->type == 0) {
 		long result = funcao_cpu_dominante_long(worker->A, worker->B);
 
-		printf("\tThread%d - Result: %lu\n", worker->id, result);
+		printf("\tThread %3d - Result: %lu\n", worker->id, result);
 		// Soma o result numa variavel global controlada por um mutex
 		WORKER_add_to_long_sum(result);
 	} else if (worker->type == 1) {
 		long result = funcao_cpu_dominante_long_rand(worker->A, worker->B);
 
-		printf("\tThread%d - Result: %lu\n", worker->id, result);
+		printf("\tThread %3d - Result: %lu\n", worker->id, result);
 		// Soma o result numa variavel global controlada por um mutex
 		WORKER_add_to_long_sum(result);
 	} else {
 		long double result = funcao_cpu_dominante_long_double(worker->A, worker->B);
 
-		printf("\tThread%d - Result: %.2Lf\n", worker->id, result);
+		printf("\tThread %3d - Result: %.2Lf\n", worker->id, result);
 		// Soma o result numa variavel global controlada por um mutex
 		WORKER_add_to_long_double_sum(result);
-		
 	}
+
     pthread_exit(0);
 }
 
 /******************************************************************************/
-void WORKER_add_to_long_sum (long quantitie) {
+void WORKER_add_to_long_sum (long quantitie)
+{
 	pthread_mutex_lock(&mutex);
 	long_pseudo_sum += quantitie;
 	pthread_mutex_unlock(&mutex);
 }
 
 /******************************************************************************/
-void WORKER_add_to_long_double_sum (long double quantitie) {
+void WORKER_add_to_long_double_sum (long double quantitie)
+{
 	pthread_mutex_lock(&mutex);
 	long_double_pseudo_sum += quantitie;
 	pthread_mutex_unlock(&mutex);
 }
 
 /******************************************************************************/
-long double WORKER_get_long_double_pseudo_sum() {
+long double WORKER_get_long_double_pseudo_sum ()
+{
 	return long_double_pseudo_sum;
 }
 
 /******************************************************************************/
-long WORKER_get_long_pseudo_sum() {
+long WORKER_get_long_pseudo_sum ()
+{
 	return long_pseudo_sum;
 }
 
