@@ -16,7 +16,7 @@ done
 
 #espera um pouco para ter certeze de que ao rodar o programa
 #as CPUs vão estar desabilitadas
-sleep 10s
+sleep 5s
 
 echo 'rodando o calculos com uma thread (sem HT)'
 lscpu --extended
@@ -28,7 +28,7 @@ echo 'habilitando CPU'$cpu0ht
 echo 1 > /sys/devices/system/cpu/cpu$cpu0ht/online
 
 #espera um pouco
-sleep 10s
+sleep 5s
 
 echo 'rodando o calculos com duas threads (uma física e uma HT)'
 lscpu --extended

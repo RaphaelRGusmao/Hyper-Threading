@@ -11,7 +11,7 @@
 .PHONY: clean
 CC = gcc
 #CFLAGS = -Wall -O2 -g
-CFLAGS = -O2 -g
+CFLAGS = -O0 -g
 OBJS = \
 	worker.o \
 	desafio2.o
@@ -20,7 +20,6 @@ all: desafio2
 
 desafio2: $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ -lpthread
-	#make clean
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@
