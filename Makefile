@@ -10,7 +10,6 @@
 
 .PHONY: clean
 CC = gcc
-#CFLAGS = -Wall -O2 -g
 CFLAGS = -O0 -g
 OBJS = \
 	worker.o \

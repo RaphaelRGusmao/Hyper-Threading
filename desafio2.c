@@ -58,15 +58,7 @@ int main (int argc, char const *argv[])
     // resultados com n threads quando exatamente n CPUs estavam ativas.
     // Verificamos isso com o comando lscpu --extended no shell.
 
-    // Um resultado interessante de ser observado eh rodar o programa sem 
-    // argumento opcional e comparar os tempos de execucao para uma thread
-    // e para n = 1 thread(s). O tempo da primeira execucao eh sempre 
-    // ligeiramente menor devido a nao precisar da estrutura de multitred
-    // (alocar memoria para a thread, criar uma thread separada da main para
-    // calcular, usar o mutex).
-
     printf(CYAN "\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ Inicio ]\n\n" END);
-
 
     //Uma execucao fazendo contas com variavel do tipo long,
     //uma execucao fazendo contas com variavel do tipo long a chamadas a rand(),
