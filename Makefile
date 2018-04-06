@@ -19,6 +19,7 @@ all: desafio2
 
 desafio2: $(OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ -lpthread
+	make clean
 
 %.o: %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -28,7 +29,6 @@ desafio2: $(OBJS)
 
 clean:
 	rm -f *.o *~
-	rm -f desafio2
 
 run:
 	./desafio2

@@ -32,7 +32,7 @@ pthread_mutex_t mutex;
 // Trabalhador
 struct worker {
 	int id;
-	int type;                 // 0 long, 1 long com rand, 2 long double
+	int type; // 0 long, 1 long com rand, 2 long double
 	long A;
 	long B;
 	long double result;
