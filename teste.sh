@@ -12,7 +12,7 @@
 cpus=0
 # Descobre o número de CPUs do processador
 cpus=$(lscpu | grep ^'CPU(s):' | cut -s -d ' ' -f2-)
-#descobre qual CPU é HT da CPU0
+# Descobre qual CPU eh HT da CPU0
 cpu0ht=$(cat /sys/devices/system/cpu/cpu0/topology/thread_siblings_list | cut -s -d- -f2-)
 
 # Desabilita todas as CPUs menos uma (a CPU0)

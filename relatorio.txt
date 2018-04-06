@@ -1,6 +1,6 @@
 ################################################################################
 #                                IME-USP (2018)                                #
-#            MAC0219 - Programacao Concorrente e Paralela - MiniDesafio2       #
+#           MAC0219 - Programacao Concorrente e Paralela - Desafio2            #
 #                                                                              #
 #                                  Relatorio                                   #
 #                                                                              #
@@ -8,81 +8,79 @@
 #                       Raphael R. Gusmao - NUSP 9778561                       #
 ################################################################################
 
+    Criamos uma função que faz algumas contas várias vezes  para  ocupar  a  ULA
+e/ou FPU e então calculamos  os  tempos  de  execução  desta  função  quando  os
+cálculos eram feitos usando uma variável do tipo long (para  estressar  a  ULA),
+usando uma variável do tipo long com calculos envolvento números  aleatórios,  e
+usando uma variável do tipo long double (para estressar a FPU).
 
-Criamos uma função que faz algumas contas várias vezes para ocupar a ULA e/ou 
-FPU e então calculamos os tempos de execução desta função quando os cálculos
-eram feitos usando uma variável do tipo long (para estressar a ULA), usando uma 
-variável do tipo long com calculos envolvento números aleatórios, e usando uma
-variável do tipo long double (para estressar a FPU). 
+    O processador da máquina em que testamos o programa é um Intel Core i3-2350M
+com 4 processadores, dos quais 2 são físicos e 2 são lógicos (hyper-threads).
 
-O processador da máquina em que testasmos o programa é um Intel Core i3-2350M
-com quatro processadores, dos quais 2 são físicos e dois são lógicos 
-(hyper-threads).
+    Os testes nos mostraram que:
 
-Os testes nos mostraram que:
-* Uma CPU sem hyper-threading fazendo contas com variáveis do tipo long é cerca 
-  de duas vezes mais lenta que uma CPU com hyper-threading.
-* Uma CPU sem hyper-threading fazendo contas com variáveis do tipo long e 
-  chamadas para a geração de números aleatórios é cerca de dez vezes mais rápida
-  que uma CPU com hyper-threading habilitado.
-* Uma CPU sem hyper-threading fazendo contas com variáveis do tipo long double
-  é um pouco mais lenta que uma CPU com hyper-threading habilitado.
+    * Uma CPU sem hyper-threading fazendo contas com variáveis do  tipo  long  é
+      cerca de duas vezes mais lenta que uma CPU com hyper-threading.
 
-Tentamos ser o mais cuidadosos e precissos o possível na montagem do programa, 
-analizando cuidadosamente quando iniciar e terminar a cronometragem do tempo
-despendido por cada modo de execução. Também tomamos cuidado para garantir que
-ambas a execuções (com e sem hyper-threading) efetuasem exatamente as mesmas 
+    * Uma CPU sem hyper-threading fazendo contas com variáveis do  tipo  long  e
+      chamadas para a geração de números aleatórios é cerca  de  10  vezes  mais
+      rápida que uma CPU com hyper-threading habilitado.
+
+    * Uma CPU sem hyper-threading fazendo contas  com  variáveis  do  tipo  long
+      double é um pouco mais lenta que uma CPU com hyper-threading habilitado.
+
+    Tentamos ser o mais cuidadosos e precisos possível na montagem do  programa,
+analizando cuidadosamente quando iniciar e terminar  a  cronometragem  do  tempo
+despendido por cada modo de execução. Também tomamos cuidado para  garantir  que
+ambas a execuções (com e sem hyper-threading) efetuassem  exatamente  as  mesmas
 contas.
 
+################################################################################
 
-O MiniDesafio2 recebe como argumento opcional o numero de threads que devem ser 
+    O Desafio2 recebe como argumento opcional o numero de threads que devem  ser
 usadas. Se o argumento nao estiver presente executa com uma unica thread.
 
-Para executar o MiniDesafio2 no terminal, digite:
+Para executar o Desafio2 no terminal, digite:
     $ make
     $ ./desafio2
     ou
     $ make run
 
 Também há um script com testes mais automatizados no arquivo teste.sh.
-Para executar os testes desse script provavelmente será necessário estar logado
+Para executar os testes desse script provavelmente será necessário estar  logado
 como root no shell por meio do comando sudo su.
 
-Uma saída típica do programa é:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ Inicio ]
+Exemplo de saida:
++------------------------------------------------------------------------------+
+| Execucao fazendo contas com variavel do tipo long
+| Execucao com 1 thread:
+| 	Thread Main - Result: 20000000
+| 	Tempo total de execucao: 43164766 nanossegundos
+| Execucao com 2 threads:
+| 	Thread   1 - Result: 10000000
+| 	Thread   0 - Result: 10000000
+| 	Total              : 20000000
+| 	Tempo total de execucao: 28868148 nanossegundos
+|
+| Execucao fazendo contas com variavel do tipo long e chamadas a rand()
+| Execucao com 1 thread:
+| 	Thread Main - Result: 22014952
+| 	Tempo total de execucao: 291335333 nanossegundos
+| Execucao com 2 threads:
+| 	Thread   1 - Result: 11006119
+| 	Thread   0 - Result: 11008833
+| 	Total              : 42014952
+| 	Tempo total de execucao: 1184217784 nanossegundos
+|
+| Execucao fazendo contas com variavel do tipo long double
+| Execucao com 1 thread:
+| 	Thread Main - Result: 5000000.00
+| 	Tempo total de execucao: 54665942 nanossegundos
+| Execucao com 2 threads:
+| 	Thread   1 - Result: 2500000.00
+| 	Thread   0 - Result: 2500000.00
+| 	Total              : 5000000.00
+| 	Tempo total de execucao: 38860315 nanossegundos
++------------------------------------------------------------------------------+
 
-Execucao fazendo contas com variavel do tipo long
-Execucao com 1 thread:
-	Thread Main - Result: 20000000
-	Tempo total de execucao: 43164766 nanossegundos
-Execucao com 2 threads:
-	Thread   1 - Result: 10000000
-	Thread   0 - Result: 10000000
-	Total              : 20000000
-	Tempo total de execucao: 28868148 nanossegundos
-
-Execucao fazendo contas com variavel do tipo long e chamadas a rand()
-Execucao com 1 thread:
-	Thread Main - Result: 22014952
-	Tempo total de execucao: 291335333 nanossegundos
-Execucao com 2 threads:
-	Thread   1 - Result: 11006119
-	Thread   0 - Result: 11008833
-	Total              : 42014952
-	Tempo total de execucao: 1184217784 nanossegundos
-
-Execucao fazendo contas com variavel do tipo long double
-Execucao com 1 thread:
-	Thread Main - Result: 5000000.00
-	Tempo total de execucao: 54665942 nanossegundos
-Execucao com 2 threads:
-	Thread   1 - Result: 2500000.00
-	Thread   0 - Result: 2500000.00
-	Total              : 5000000.00
-	Tempo total de execucao: 38860315 nanossegundos
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[ Fim ]
-
-
-
-
+################################################################################
